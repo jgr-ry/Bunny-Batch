@@ -1023,34 +1023,29 @@ def show_banner() -> None:
 
 
 def show_menu() -> None:
+    options = [
+        ("1", "Extraer videos desde URL del catalogo"),
+        ("2", "Extraer videos desde catalogo.json"),
+        ("3", "Descargar curso desde biblioteca (data/cursos)"),
+        ("4", "Extraer + descargar (URL del catalogo)"),
+        ("5", "Abrir carpeta de descargas"),
+        ("6", "Plataforma con login (caso de estudio / token)"),
+        ("7", "Guia: extraer curso en el navegador"),
+        ("8", "Reintentar solo videos fallidos"),
+        ("9", "Abrir carpetas del workspace (datos, import, scripts)"),
+        ("0", "Salir"),
+    ]
+
     if not ui_enabled():
-        print("\n  1) Extraer videos desde URL del catalogo")
-        print("  2) Extraer videos desde catalogo.json")
-        print("  3) Descargar curso (biblioteca)")
-        print("  8) Reintentar videos fallidos")
-        print("  4) Extraer + descargar (URL del catalogo)")
-        print("  5) Abrir carpeta de descargas")
-        print("  6) Plataforma con login (caso de estudio)")
-        print("  7) Guia: extraer curso en navegador")
-        print("  9) Abrir carpetas (datos / import / scripts)")
-        print("  0) Salir\n")
+        print()
+        for key, label in options:
+            print(f"  {key}) {label}")
+        print()
         return
 
     table = Table(show_header=False, box=box.SIMPLE, padding=(0, 1))
     table.add_column("Opcion", style="accent", width=4)
     table.add_column("Descripcion", style="menu")
-    options = [
-        ("1", "Extraer videos desde URL del catalogo"),
-        ("2", "Extraer videos desde catalogo.json"),
-        ("3", "Descargar curso desde biblioteca (data/cursos)"),
-        ("8", "Reintentar solo videos fallidos"),
-        ("4", "Extraer + descargar (URL del catalogo)"),
-        ("5", "Abrir carpeta de descargas"),
-        ("6", "Plataforma con login (caso de estudio / token)"),
-        ("7", "Guia: extraer curso en el navegador"),
-        ("9", "Abrir carpetas del workspace (datos, import, scripts)"),
-        ("0", "Salir"),
-    ]
     for key, label in options:
         table.add_row(key, label)
     console.print(Panel(table, title="[accent]Menu principal[/accent]", border_style="cyan"))
@@ -2234,7 +2229,12 @@ def interactive_menu() -> int:
         ui_print(f"[muted]Migracion/importacion: {len(bootstrap_notes)} cambio(s)[/muted]\n", "muted")
     show_menu()
 
-    choice = ask("Elige una opcion", "3")
+    valid_choices = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+    while True:
+        choice = ask("Elige una opcion").strip()
+        if choice in valid_choices:
+            break
+        ui_print("Opcion no valida. Introduce un numero del menu (0-9).", "warn")
 
     if choice == "0":
         return 0
